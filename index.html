@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jangra's Haveli - Pure Veg! 🌱</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #28a745;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .veg-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Category Tags */
+        .category-tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .category-tag {
+            background: white;
+            color: #28a745;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #28a745;
+        }
+
+        .category-tag:hover, .category-tag.active {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Food Container */
+        .food-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            position: relative;
+            border-top: 5px solid #28a745;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .food-card h3 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .food-category {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 24px;
+            color: #28a745;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .order-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .order-btn:hover {
+            background: #218838;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+            transition: right 0.3s;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            background: #28a745;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 2px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .cart-total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #28a745;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background: #0056b3;
+        }
+
+        /* Cart Item */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .cart-item-info p {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Checkout Popup */
+        .checkout-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .checkout-popup.show {
+            display: flex;
+        }
+
+        .checkout-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .checkout-content h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .checkout-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .checkout-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .place-order-btn {
+            flex: 2;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            padding: 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Popup Message */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            z-index: 3000;
+        }
+
+        .popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Offer Box */
+        .offer-box {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shopping Cart Icon -->
+    <div class="cart-icon" onclick="openCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cartCount" class="cart-count">0</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>✨ Jangra's Haveli ✨</h1>
+        <p>Pure Veg Restaurant 🌱</p>
+        <span class="veg-badge"><i class="fas fa-leaf"></i> 100% PURE VEG</span>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-tags">
+        <span class="category-tag active" onclick="filterFood('all')">All 🌱</span>
+        <span class="category-tag" onclick="filterFood('starters')">Starters 🧀</span>
+        <span class="category-tag" onclick="filterFood('maincourse')">Main Course 🍛</span>
+        <span class="category-tag" onclick="filterFood('breads')">Breads 🫓</span>
+        <span class="category-tag" onclick="filterFood('chinese')">Chinese 🥢</span>
+        <span class="category-tag" onclick="filterFood('fastfood')">Fast Food 🍔</span>
+        <span class="category-tag" onclick="filterFood('desserts')">Desserts 🍰</span>
+    </div>
+
+    <!-- Food Menu - ALL UNIQUE IMAGES! -->
+    <div class="food-container" id="foodMenu">
+
+        <!-- ============ STARTERS ============ -->
+        
+        <!-- Paneer Tikka -->
+        <div class="food-card" data-category="starters">
+            <span class="food-category">⭐ STARTER</span>
+            <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400" alt="Paneer Tikka">
+            <h3>Paneer Tikka 🌱</h3>
+            <p class="price">₹249</p>
+            <button class="order-btn" onclick="addToCart('Paneer Tikka', 249)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Seekh Kebab -->
+        <div class="food-card" data-category="starters">
+            <span class="food-category">⭐ STARTER</span>
+            <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400" alt="Veg Seekh Kebab">
+            <h3>Veg Seekh Kebab 🌱</h3>
+            <p class="price">₹199</p>
+            <button class="order-btn" onclick="addToCart('Veg Seekh Kebab', 199)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        
+
+        <!-- Crispy Corn -->
+        <div class="food-card" data-category="starters">
+            <span class="food-category">⭐ STARTER</span>
+            <img src="assets/images/crispycorn.jpg" alt="Crispy Corn">
+            <h3>Crispy Corn 🌱</h3>
+            <p class="price">₹159</p>
+            <button class="order-btn" onclick="addToCart('Crispy Corn', 159)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Cheese Balls -->
+        <div class="food-card" data-category="starters">
+            <span class="food-category">⭐ STARTER</span>
+            <img src="assets/images/cheeseballs.jpg" alt="Cheese Balls">
+            <h3>Cheese Balls 🌱</h3>
+            <p class="price">₹189</p>
+            <button class="order-btn" onclick="addToCart('Cheese Balls', 189)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- ============ MAIN COURSE - ALL UNIQUE! ============ -->
+
+        <!-- Paneer Butter Masala - UNIQUE IMAGE 1 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400" alt="Paneer Butter Masala">
+            <h3>Pav bhaji  🌱</h3>
+            <p class="price">₹279</p>
+            <button class="order-btn" onclick="addToCart('Paneer Butter Masala', 279)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Dal Makhani - UNIQUE IMAGE 2 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400" alt="Dal Makhani">
+            <h3>Thali 🌱</h3>
+            <p class="price">₹199</p>
+            <button class="order-btn" onclick="addToCart('Dal Makhani', 199)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Shahi Paneer - UNIQUE IMAGE 3 (Different from Paneer Butter Masala) -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="assets/images/ShahiPanner.jpg" alt="Shahi Paneer">
+            <h3>Shahi Paneer 🌱</h3>
+            <p class="price">₹259</p>
+            <button class="order-btn" onclick="addToCart('Shahi Paneer', 259)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Malai Kofta - UNIQUE IMAGE 4 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="assets/images/MalaiKofta.jpg" alt="Malai Kofta">
+            <h3>Malai Kofta 🌱</h3>
+            <p class="price">₹239</p>
+            <button class="order-btn" onclick="addToCart('Malai Kofta', 239)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Kadai Paneer - UNIQUE IMAGE 5 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="assets/images/kadaipanner.jpg" alt="Kadai Paneer">
+            <h3>Kadai Paneer 🌱</h3>
+            <p class="price">₹249</p>
+            <button class="order-btn" onclick="addToCart('Kadai Paneer', 249)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Palak Paneer - UNIQUE IMAGE 6 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="assets/images/PalakPaneer.jpg" alt="Palak Paneer">
+            <h3>Palak Paneer 🌱</h3>
+            <p class="price">₹219</p>
+            <button class="order-btn" onclick="addToCart('Palak Paneer', 219)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Kolhapuri - UNIQUE IMAGE 7 -->
+        <div class="food-card" data-category="maincourse">
+            <span class="food-category">🍛 MAIN COURSE</span>
+            <img src="assets/images/vegkolhapuri.jpg" alt="Veg Kolhapuri">
+            <h3>Veg Kolhapuri 🌱</h3>
+            <p class="price">₹199</p>
+            <button class="order-btn" onclick="addToCart('Veg Kolhapuri', 199)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- ============ BREADS ============ -->
+
+        <!-- Butter Naan -->
+        <div class="food-card" data-category="breads">
+            <span class="food-category">🫓 BREAD</span>
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400" alt="Butter Naan">
+            <h3>Butter Naan 🌱</h3>
+            <p class="price">₹49</p>
+            <button class="order-btn" onclick="addToCart('Butter Naan', 49)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Garlic Naan -->
+        <div class="food-card" data-category="breads">
+            <span class="food-category">🫓 BREAD</span>
+            <img src="assets/images/garlicnaan.jpg" alt="Garlic Naan">
+            <h3>Garlic Naan 🌱</h3>
+            <p class="price">₹59</p>
+            <button class="order-btn" onclick="addToCart('Garlic Naan', 59)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Tandoori Roti -->
+        <div class="food-card" data-category="breads">
+            <span class="food-category">🫓 BREAD</span>
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400" alt="Tandoori Roti">
+            <h3>Tandoori Roti 🌱</h3>
+            <p class="price">₹39</p>
+            <button class="order-btn" onclick="addToCart('Tandoori Roti', 39)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Lachha Paratha -->
+        <div class="food-card" data-category="breads">
+            <span class="food-category">🫓 BREAD</span>
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400" alt="Lachha Paratha">
+            <h3>Lachha Paratha 🌱</h3>
+            <p class="price">₹59</p>
+            <button class="order-btn" onclick="addToCart('Lachha Paratha', 59)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- ============ CHINESE ============ -->
+
+        <!-- Honey Chili Potato -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400" alt="Honey Chili Potato">
+            <h3>Honey Chili Potato 🌱</h3>
+            <p class="price">₹199</p>
+            <button class="order-btn" onclick="addToCart('Honey Chili Potato', 199)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Chowmein -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400" alt="Veg Chowmein">
+            <h3>Veg Chowmein 🌱</h3>
+            <p class="price">₹149</p>
+            <button class="order-btn" onclick="addToCart('Veg Chowmein', 149)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Gobi Manchurian -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo=1606491956689-2ea866880c84?w=400&bri=20" alt="Gobi Manchurian">
+            <h3>Gobi Manchurian 🌱</h3>
+            <p class="price">₹179</p>
+            <button class="order-btn" onclick="addToCart('Gobi Manchurian', 179)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Fried Rice -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400" alt="Veg Fried Rice">
+            <h3>Veg Fried Rice 🌱</h3>
+            <p class="price">₹169</p>
+            <button class="order-btn" onclick="addToCart('Veg Fried Rice', 169)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Spring Rolls -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo-1629735860972-6c7e25d97e16?w=400" alt="Spring Rolls">
+            <h3>Spring Rolls 🌱</h3>
+            <p class="price">₹129</p>
+            <button class="order-btn" onclick="addToCart('Spring Rolls', 129)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Szechuan Noodles -->
+        <div class="food-card" data-category="chinese">
+            <span class="food-category">🥢 CHINESE</span>
+            <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&sat=100" alt="Szechuan Noodles">
+            <h3>Szechuan Noodles 🌱</h3>
+            <p class="price">₹179</p>
+            <button class="order-btn" onclick="addToCart('Szechuan Noodles', 179)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- ============ FAST FOOD ============ -->
+
+        <!-- Veg Burger -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍔 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" alt="Veg Burger">
+            <h3>Veg Burger 🌱</h3>
+            <p class="price">₹99</p>
+            <button class="order-btn" onclick="addToCart('Veg Burger', 99)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Cheese Burger -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍔 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&bri=10" alt="Cheese Burger">
+            <h3>Cheese Burger 🌱</h3>
+            <p class="price">₹129</p>
+            <button class="order-btn" onclick="addToCart('Cheese Burger', 129)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Pizza -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍕 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" alt="Veg Pizza">
+            <h3>Veg Pizza 🌱</h3>
+            <p class="price">₹299</p>
+            <button class="order-btn" onclick="addToCart('Veg Pizza', 299)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Margherita Pizza -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍕 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&sat=-50" alt="Margherita Pizza">
+            <h3>Margherita Pizza 🌱</h3>
+            <p class="price">₹249</p>
+            <button class="order-btn" onclick="addToCart('Margherita Pizza', 249)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- French Fries -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍟 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" alt="French Fries">
+            <h3>French Fries 🌱</h3>
+            <p class="price">₹99</p>
+            <button class="order-btn" onclick="addToCart('French Fries', 99)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Veg Pasta -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🍝 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1551180253-71855ce54140?w=400" alt="Veg Pasta">
+            <h3>Veg Pasta 🌱</h3>
+            <p class="price">₹199</p>
+            <button class="order-btn" onclick="addToCart('Veg Pasta', 199)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Cheese Sandwich -->
+        <div class="food-card" data-category="fastfood">
+            <span class="food-category">🥪 FAST FOOD</span>
+            <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400" alt="Cheese Sandwich">
+            <h3>Cheese Sandwich 🌱</h3>
+            <p class="price">₹119</p>
+            <button class="order-btn" onclick="addToCart('Cheese Sandwich', 119)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- ============ DESSERTS ============ -->
+
+        <!-- Gulab Jamun -->
+        <div class="food-card" data-category="desserts">
+            <span class="food-category">🍰 DESSERT</span>
+            <img src="assets/images/gulabjamun.jpg" alt="Gulab Jamun">
+            <h3>Gulab Jamun 🌱</h3>
+            <p class="price">₹99</p>
+            <button class="order-btn" onclick="addToCart('Gulab Jamun', 99)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Ice Cream -->
+        <div class="food-card" data-category="desserts">
+            <span class="food-category">🍰 DESSERT</span>
+            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" alt="Ice Cream">
+            <h3>Ice Cream 🌱</h3>
+            <p class="price">₹89</p>
+            <button class="order-btn" onclick="addToCart('Ice Cream', 89)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+
+        <!-- Rasmalai -->
+        <div class="food-card" data-category="desserts">
+            <span class="food-category">🍰 DESSERT</span>
+            <img src="assets/images/rasmalai.jpg" alt="Rasmalai">
+            <h3>Rasmalai 🌱</h3>
+            <p class="price">₹109</p>
+            <button class="order-btn" onclick="addToCart('Rasmalai', 109)">
+                <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+
+    <!-- Special Offer -->
+    <div class="offer-box">
+        <h2>🎉 SPECIAL OFFER! 🎉</h2>
+        <p>Buy any 2 items, get 10% OFF!</p>
+        <p style="font-size: 16px; margin-top: 10px;">Use code: VEG10</p>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+            <button class="close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div id="cartItems" class="cart-items">
+            <!-- Cart items will appear here -->
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="showCheckout()">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Form -->
+    <div id="checkoutForm" class="checkout-popup">
+        <div class="checkout-content">
+            <h2><i class="fas fa-user"></i> Your Details</h2>
+            <input type="text" id="customerName" placeholder="Enter your name" class="checkout-input">
+            <input type="tel" id="customerPhone" placeholder="Phone number" class="checkout-input">
+            <input type="text" id="customerAddress" placeholder="Delivery address" class="checkout-input">
+            
+            <div class="checkout-buttons">
+                <button onclick="placeOrder()" class="place-order-btn">
+                    <i class="fas fa-check"></i> Place Order
+                </button>
+                <button onclick="closeCheckout()" class="cancel-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Message -->
+    <div id="popupMessage" class="popup">
+        <p>✨</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ==================== CART SYSTEM ====================
+        
+        // Cart array to store items
+        let cart = [];
+
+        // YOUR GOOGLE APPS SCRIPT URL - Replace with your actual URL
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEisM8ssKRTNgsio_4eOqiut0iPle2u9twQnSRrlGJENIhLtRawv-g0-tTVxr9q0ot/exec";
+
+        // Add to cart function
+        function addToCart(name, price) {
+            // Check if item already exists
+            let found = false;
+            for (let i = 0; i < cart.length; i++) {
+                if (cart[i].name === name) {
+                    cart[i].quantity++;
+                    found = true;
+                    break;
+                }
+            }
+            
+            // If new item, add to cart
+            if (!found) {
+                cart.push({
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            // Update cart display
+            updateCart();
+            
+            // Show success message
+            showPopup(`✅ ${name} added to cart!`);
+        }
+
+        // Update cart display
+        function updateCart() {
+            // Update cart count
+            let totalItems = 0;
+            for (let i = 0; i < cart.length; i++) {
+                totalItems += cart[i].quantity;
+            }
+            document.getElementById('cartCount').textContent = totalItems;
+            
+            // Display cart items
+            let cartHtml = '';
+            let totalPrice = 0;
+            
+            for (let i = 0; i < cart.length; i++) {
+                let item = cart[i];
+                cartHtml += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <p>₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="qty-btn" onclick="changeQuantity(${i}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="qty-btn" onclick="changeQuantity(${i}, 1)">+</button>
+                            <button class="remove-btn" onclick="removeItem(${i})">Remove</button>
+                        </div>
+                    </div>
+                `;
+                totalPrice += item.price * item.quantity;
+            }
+            
+            if (cart.length === 0) {
+                cartHtml = '<p style="text-align: center; padding: 20px;">🛒 Your cart is empty</p>';
+            }
+            
+            document.getElementById('cartItems').innerHTML = cartHtml;
+            document.getElementById('cartTotal').textContent = '₹' + totalPrice;
+        }
+
+        // Change quantity
+        function changeQuantity(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            updateCart();
+        }
+
+        // Remove item
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+            showPopup('🗑️ Item removed');
+        }
+
+        // Open cart
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+        }
+
+        // Close cart
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+        }
+
+        // Show checkout form
+        function showCheckout() {
+            if (cart.length === 0) {
+                showPopup('❌ Your cart is empty!');
+                return;
+            }
+            document.getElementById('checkoutForm').classList.add('show');
+        }
+
+        // Close checkout form
+        function closeCheckout() {
+            document.getElementById('checkoutForm').classList.remove('show');
+        }
+
+        // Place order
+        function placeOrder() {
+            // Get customer details
+            let name = document.getElementById('customerName').value;
+            let phone = document.getElementById('customerPhone').value;
+            let address = document.getElementById('customerAddress').value;
+            
+            // Validate
+            if (!name || !phone || !address) {
+                showPopup('❌ Please fill all details!');
+                return;
+            }
+            
+            // Calculate total
+            let total = 0;
+            for (let item of cart) {
+                total += item.price * item.quantity;
+            }
+            
+            // Prepare order data
+            let orderData = {
+                name: name,
+                phone: phone,
+                address: address,
+                items: cart,
+                total: total
+            };
+            
+            // Show success message
+            showPopup('✅ Order placed successfully!');
+            
+            // Clear cart
+            cart = [];
+            updateCart();
+            closeCart();
+            closeCheckout();
+            
+            // Clear input fields
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerAddress').value = '';
+            
+            // Log order (you can see this in console)
+            console.log('Order placed:', orderData);
+            
+            // If you want to send email, uncomment this:
+            // sendEmail(orderData);
+        }
+
+        // Show popup message
+        function showPopup(message) {
+            let popup = document.getElementById('popupMessage');
+            popup.innerHTML = `<p>${message}</p>`;
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 2000);
+        }
+
+        // ==================== FILTER SYSTEM ====================
+
+        // Filter food by category
+        function filterFood(category) {
+            let foods = document.querySelectorAll('.food-card');
+            
+            // Update active tag
+            let tags = document.querySelectorAll('.category-tag');
+            tags.forEach(tag => {
+                if (tag.textContent.toLowerCase().includes(category === 'all' ? 'all' : category)) {
+                    tag.classList.add('active');
+                } else {
+                    tag.classList.remove('active');
+                }
+            });
+            
+            // Show/hide foods
+            foods.forEach(food => {
+                if (category === 'all' || food.dataset.category === category) {
+                    food.style.display = 'block';
+                } else {
+                    food.style.display = 'none';
+                }
+            });
+        }
+
+        // Welcome message
+        window.onload = function() {
+            showPopup('✨ Welcome to Jangra\'s Haveli! ✨');
+            console.log('Website loaded successfully!');
+        }
+    </script>
+</body>
+</html>
