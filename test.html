@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Test Email Sender</h2>
+    <button onclick="sendTest()">Send Test Email</button>
+
+    <script>
+    function sendTest() {
+        let url = "https://script.google.com/macros/s/AKfycbx7i67V8nUnXkL1DbrLTO1B0qAmMks1nm_vGEh7eh0Dyx29oLF6LZ9GY2B5pkt79ah6/exec";
+        
+        let testOrder = {
+            name: "Test Customer",
+            phone: "9876543210",
+            address: "Test Address, Delhi",
+            items: [
+                {name: "Paneer Tikka", price: 249, quantity: 2},
+                {name: "Butter Naan", price: 49, quantity: 3}
+            ],
+            total: 645
+        };
+        
+        let form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+        
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'data';
+        input.value = JSON.stringify(testOrder);
+        form.appendChild(input);
+        
+        document.body.appendChild(form);
+        form.submit();
+        
+        alert('Test sent! Check your email in 1-2 minutes.');
+    }
+    </script>
+</body>
+</html>
